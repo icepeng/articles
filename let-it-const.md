@@ -388,7 +388,7 @@ function validatorFactory<T>(validators: Validator<T>[]) {
 * default 값 - || 혹은 ?? 사용
 * nullish 체크 - && 혹은 Optional Chaining 사용
 
-?? 연산자와 Optional Chaining은 현재 [TC39](https://github.com/tc39/proposals) Stage 3 Proposal입니다. Stage 3는 앞으로의 JavaScript에 포함되는 것이 확정적이기 때문에 미리 배워두면 좋다고 생각한다. 그 때문에 TypeScript에서는 3.7버전부터 미리 지원하기 시작한 기능이다.
+?? 연산자와 Optional Chaining은 현재 [TC39](https://github.com/tc39/proposals) Stage 3 Proposal에 올라와있다. Stage 3는 앞으로의 JavaScript에 포함되는 것이 확정적이기 때문에 미리 배워두면 좋다고 생각한다. 그 때문에 TypeScript에서는 3.7버전부터 미리 지원하기 시작한 기능이다.
 
 ??가 &&보다 더 안전하다. ??는 nullish 체크이기 때문에 `null`, `undefined`만 우측 값을 평가하는 반면, ||는 falsy 체크이기 때문에 `0`, `''` 까지도 범위에 포함하는 문제가 있다. 만약 `null`, `undefined`만을 체크하는 목적으로 사용했다면 예상치 못한 버그가 발생할 수 있다. 이는 Optional Chaining에도 동일하게 적용된다.
 

@@ -11,6 +11,8 @@
 
 두 라이브러리 모두 동일한 목적을 가지고 작성되었습니다. Redux에서 **비동기** 액션을 처리하는 것입니다. 더 정확히는 **부작용**을 관리하는 게 목적입니다. 부작용을 관리하는것이 왜 중요할까요? [Redux의 3가지 원칙](https://redux.js.org/introduction/three-principles) 중 하나인 **변경은 순수 함수로만 이루어져야 한다**는 것이 그 이유입니다.
 
+> 부작용 관리와 비동기 처리라는 용어가 뒤섞여 사용되는 이유는 부작용이 있는 코드의 대표적인 예시가 비동기 처리이기 때문입니다. API 호출, DB 쿼리, 파일 입출력 등등... 하나같이 외부 상태를 변화시키거나, 같은 리턴값을 보장해주지 않는 동작들입니다. 하지만 localStorage 접근처럼 비동기가 아니지만 부작용이 있는 코드도 존재합니다.
+
 Redux의 동작 방식을 아주 간략하게 묘사하면
 
 1. Action을 dispatch한다
@@ -18,21 +20,19 @@ Redux의 동작 방식을 아주 간략하게 묘사하면
 
 만약 여기서 API를 호출한 결과를 Store에 저장하고 싶다고 가정합시다. API 호출은 당연히 비동기로 동작할것이고, 호출할 때마다 다른 값이 돌아올 수도 있고, 심지어 실패할 수도 있습니다.
 
-(비동기가 부작용의 대표적인 예시라는 점 설명)
-
 (액션을 트리거/성공/실패 3가지로 나눠서 동작하는 방식 설명)
 
 ## Redux-Saga
 
 ### Generator
 
-Generator Function은 매우 흥미로운 면이 많은 기능이지만, 실제로 유용하게 활용되는 경우는 찾아보기 힘듭니다. 저는 Redux-Saga를 알아보면서 Generator Function을 문제 해결에 굉장히 잘 활용했다고 느꼈습니다.
+Generator Function은 매우 흥미로운 면이 많은 기능이지만, 실제로 유용하게 활용되는 경우는 찾아보기 힘듭니다. async/await 문법이 도입되기 전에 잠시 [co](https://github.com/tj/co)를 사용했던 기억이 있는 정도네요. 저는 Redux-Saga를 알아보면서 Generator Function을 문제 해결에 굉장히 잘 활용했다고 느꼈습니다.
 
 더 깊이 들어가려면 일단 Generator Function에 대한 이해가 필요합니다. Generator Function을 아주 간략하게 설명하자면 `return`을 여러번 할 수 있는 함수입니다.
 
 (Generator 안팎으로 값을 주고받는 과정 설명)
 
-(아래는 async-await이 Generator 응용의 한 종류라는 것을 설명하기 위한 예시)
+이런 Generator의 동작을 응용하면 부작용과 로직을 분리해낼 수 있습니다. 아래 코드는 비동기 처리라는 부작용을 Generator를 이용해 외부로 분리해내는 예제입니다.
 ```js
 function async(gen) {
   const it = gen();
@@ -60,7 +60,12 @@ const result = async(function*() {
 result.then(x => console.log(x)); // 10
 ```
 
+마치 async/await 문을 사용하는 것 같습니다. 차이점은 `async(function*()`으로 시작한다는 점과 `await` 대신 `yield`를 사용한다는 정도입니다.
+
+> 예시를 위해 극도로 간략하게 작성된 코드로, 실제로 async/await과 동일하게 만들기 위해서는 타입 비교와 에러 처리 등 더 많은 기능이 필요합니다. 전부 구현된 예제는 [co](https://github.com/tj/co)를 참고해주세요.
+
 (Generator를 이용해 부작용을 관리하는 방법 설명)
+
 (Worker & Watcher 구조 설명)
 
 ## Redux-Observable
